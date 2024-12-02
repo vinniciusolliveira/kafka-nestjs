@@ -1,0 +1,13 @@
+{
+  "name": "@kafka-nestjs/source",
+  "version": "0.0.0",
+  "license": "MIT",
+  "scripts": {},
+  "private": true,
+  "dependencies": {},
+  "devDependencies": {
+    "@nx/js": "20.1.4",
+    "@nx/workspace": "20.1.4",
+    "nx": "20.1.4"
+  }
+}
