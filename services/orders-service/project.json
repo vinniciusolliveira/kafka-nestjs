@@ -1,0 +1,82 @@
+{
+  "name": "Orders-Service",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "services/orders-service/src",
+  "projectType": "application",
+  "targets": {
+    "build": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "webpack-cli build",
+        "args": ["node-env=production"]
+      },
+      "configurations": {
+        "development": {
+          "args": ["node-env=development"]
+        }
+      }
+    },
+    "serve": {
+      "executor": "@nx/js:node",
+      "defaultConfiguration": "development",
+      "dependsOn": ["build"],
+      "options": {
+        "buildTarget": "Orders-Service:build",
+        "runBuildTargetDependencies": false
+      },
+      "configurations": {
+        "development": {
+          "buildTarget": "Orders-Service:build:development"
+        },
+        "production": {
+          "buildTarget": "Orders-Service:build:production"
+        }
+      }
+    },
+    "typeorm": {
+      "executor": "nx:run-commands",
+      "outputs": [],
+      "options": {
+        "commands": [
+          {
+            "command": "ts-node -r tsconfig-paths/register -O '{\"module\": \"commonjs\"}' --project services/orders-service/tsconfig.app.json node_modules/typeorm/cli"
+          }
+        ]
+      }
+    },
+    "typeorm-migration-generate": {
+      "executor": "nx:run-commands",
+      "outputs": [],
+      "options": {
+        "commands": [
+          {
+            "command": "nx run api:typeorm migration:generate services/orders-service/src/database/migrations/{args.name} -d services/orders-service/src/database/database.module.ts --pretty"
+          }
+        ]
+      }
+    },
+    "typeorm-migration-create": {
+      "executor": "nx:run-commands",
+      "outputs": [],
+      "options": {
+        "commands": [
+          {
+            "command": "nx run api:typeorm migration:create services/orders-service/src/database/migrations/{args.name}"
+          }
+        ]
+      }
+    },
+    "typeorm-migration-run": {
+      "executor": "nx:run-commands",
+      "outputs": [],
+      "options": {
+        "commands": [
+          {
+            "command": "nx run api:typeorm migration:run -d services/orders-service/src/database/database.module.ts"
+          }
+        ]
+      }
+    }
+  },
+  "tags": []
+}
